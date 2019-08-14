@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:id="@+id/bottom_sheet"
+              app:behavior_hideable="true"
+              app:behavior_peekHeight="0dp"
+              android:background="@android:color/white"
+              app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+
+    <TextView android:layout_width="match_parent"
+              android:textAlignment="center"
+              android:background="@color/colorPrimary"
+
+              android:textSize="@dimen/label_text"
+              android:textColor="@android:color/white"
+              android:text="Nyesuↄ"
+              android:textStyle="bold"
+              android:id="@+id/text_verse_number"
+              android:layout_height="wrap_content"/>
+
+    <TextView android:layout_width="match_parent"
+              android:textAlignment="center"
+              android:textColor="@android:color/black"
+              android:textSize="25sp"
+              android:text=""
+              android:id="@+id/text_verse"
+              android:layout_height="wrap_content"/>
+
+
+
+</LinearLayout>

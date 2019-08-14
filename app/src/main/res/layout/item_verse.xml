@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:padding="@dimen/item_padding"
+              android:layout_height="wrap_content">
+
+    <TextView android:layout_width="match_parent"
+              android:textAlignment="center"
+
+              android:textSize="@dimen/label_text"
+              android:textColor="@android:color/black"
+              android:text="1"
+              android:textStyle="bold"
+              android:id="@+id/text_verse_number"
+              android:layout_height="wrap_content"/>
+
+    <TextView android:layout_width="match_parent"
+              android:textAlignment="center"
+              android:textColor="@android:color/black"
+
+              android:textSize="22sp"
+              android:text="Bra bε tra`m' koraa, Awu`rade pa! \n
+Ne nyinaa bε yε  wↄ  Wo dↄ  nti;\n Me koma yi mu yε  \n
+Wo trabea daa, Bε tra`m', bε tra`m’. "
+
+              android:id="@+id/text_verse"
+              android:layout_height="wrap_content"/>
+
+</LinearLayout>
