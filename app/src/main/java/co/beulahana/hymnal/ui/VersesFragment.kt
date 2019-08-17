@@ -2,24 +2,25 @@ package co.beulahana.hymnal.ui
 
 
 import android.content.Context
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
+import android.view.*
+import android.widget.TextView
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import co.beulahana.hymnal.R
 import co.beulahana.hymnal.data.AppDatabase
-import co.beulahana.hymnal.data.entity.VerseEntity
-import co.beulahana.hymnal.resource.HolderClickListener
-import co.beulahana.hymnal.resource.HymnAdapter
+import co.beulahana.hymnal.data.entity.HymnEntity
 import co.beulahana.hymnal.resource.VerseAdapter
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.botton_sheet_chorus.view.*
 import kotlinx.android.synthetic.main.fragment_hymn_list.view.*
-import java.util.function.Consumer
+import com.google.android.material.bottomsheet.BottomSheetDialog
+
 
 /**
  * A simple [Fragment] subclass.
@@ -28,7 +29,7 @@ import java.util.function.Consumer
 class VersesFragment : Fragment() {
 
 
-    var hymnId:String?=null
+    var hymn:HymnEntity?=null
     private var mDatabase:AppDatabase?=null
     private var adapter: VerseAdapter?=null
 
@@ -38,24 +39,31 @@ class VersesFragment : Fragment() {
     companion object{
         private val ARG_HYMN_ID = "hymn_id"
 
-        fun newInstance(hymnId:String)=
+        fun newInstance(hymnId:HymnEntity)=
             VersesFragment().apply {
                 arguments= Bundle().apply {
-                   putString(ARG_HYMN_ID,hymnId)
+                   putParcelable(ARG_HYMN_ID,hymnId)
                 }
             }
     }
 
     override fun onAttach(context: Context?) {
-        mDatabase= AppDatabase.getDatabaseInstance(context!!)
         super.onAttach(context)
+        (context as MainActivity).supportActionBar?.setHomeButtonEnabled(true)
+        mDatabase= AppDatabase.getDatabaseInstance(context!!)
+
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        menu?.clear()
     }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
         arguments?.let {
-            hymnId= it.getString(ARG_HYMN_ID)
+            hymn= it.getParcelable(ARG_HYMN_ID)
         }
     }
 
@@ -63,23 +71,52 @@ class VersesFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        val view= inflater.inflate(R.layout.fragment_hymn, container, false)
+        val view= inflater.inflate(co.beulahana.hymnal.R.layout.fragment_verse, container, false)
         initView(view)
         return view
     }
+
+
 
     fun initView(view: View){
         view.recyclerView.layoutManager= LinearLayoutManager(context, RecyclerView.VERTICAL,false)
         adapter = VerseAdapter(emptyList())
         view.recyclerView.adapter=adapter
-        activity?.setTitle("Verses")
+        activity?.setTitle(hymn!!.title)
+        //val sheetBehavior=BottomSheetBehavior.from(view.bottom_sheet)
+
+        val chorus=hymn!!.chorus.replace("\\n","\n")
+        //view.text_chorus.setText(chorus)
+
+        val dialogView = layoutInflater.inflate(R.layout.botton_sheet_chorus, null)
+        val dialog = BottomSheetDialog(context!!)
+        dialogView.findViewById<TextView>(R.id.text_chorus)!!.setText(chorus)
+        dialog.setContentView(dialogView)
+
+        dialog.setOnShowListener(object :DialogInterface.OnShowListener{
+            override fun onShow(dialog: DialogInterface?) {
+
+            }
+        })
+
+        view.text_chorus_label.setOnClickListener {
+            dialog.show()
+            //            if(sheetBehavior.state!=BottomSheetBehavior.STATE_EXPANDED){
+//                sheetBehavior.state=BottomSheetBehavior.STATE_EXPANDED
+//            }else{
+//                sheetBehavior.state=BottomSheetBehavior.STATE_COLLAPSED
+//            }
+        }
+
+
+
 
         initData()
     }
 
 
     fun initData(){
-        mDatabase!!.verseDao().getVerses(hymnId!!)
+        mDatabase!!.verseDao().getVerses(hymn!!.id)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({verseList->

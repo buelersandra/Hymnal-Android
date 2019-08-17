@@ -7,8 +7,9 @@ import androidx.room.*
  */
 
 @Entity(tableName = "verse",
-    indices = [Index("hymnId")],
-    foreignKeys = [ForeignKey(entity = HymnEntity::class,parentColumns =["id"] ,childColumns = ["hymnId"])])
+    indices = [Index(value = ["hymnId","verseNumber"],unique = true)]//,
+    //foreignKeys = [ForeignKey(entity = HymnEntity::class,parentColumns =["id"] ,childColumns = ["hymnId"])]
+)
 data class VerseEntity(
     @PrimaryKey(autoGenerate = true)
     var id:Int,

@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<com.flipboard.bottomsheet.BottomSheetLayout
+        android:id="@+id/bottomsheet"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" xmlns:android="http://schemas.android.com/apk/res/android">
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
@@ -12,9 +17,9 @@
               android:layout_width="match_parent"
               android:id="@+id/recyclerView"
               android:layout_height="match_parent"
-              tools:listitem="@layout/item_hymn">
+              tools:listitem="@layout/item_hymn"/>
 
-      </androidx.recyclerview.widget.RecyclerView>
   </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </FrameLayout>
+</com.flipboard.bottomsheet.BottomSheetLayout>

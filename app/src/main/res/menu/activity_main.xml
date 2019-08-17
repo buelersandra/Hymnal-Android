@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="Add Hymn" android:id="@+id/menu_add" android:visible="false"/>
+
+    <item android:title="Refresh" android:id="@+id/menu_refresh"
+          app:showAsAction="ifRoom"/>
+
+    <item android:title="About" android:id="@+id/menu_about"/>
+
+
+</menu>

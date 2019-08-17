@@ -7,12 +7,9 @@
 
     <TextView android:layout_width="match_parent"
               android:textAlignment="center"
-
-              android:textSize="@dimen/label_text"
-              android:textColor="@android:color/black"
-              android:text="1"
-              android:textStyle="bold"
               android:id="@+id/text_verse_number"
+              style="@style/Title"
+              android:text="1"
               android:layout_height="wrap_content"/>
 
     <TextView android:layout_width="match_parent"

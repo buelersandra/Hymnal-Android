@@ -6,4 +6,19 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="text_church">Christ Apostolic Church International</string>
+
+    <string name="text_compiler">
+        Cephas Narh Dosoo  (National Music Director) \n
+        Paul Meenu\n
+        Benjamin Anum Atteh\n
+        Lousi Adentwi-Eyiah
+    </string>
+
+    <string name="text_developers">
+        Sandra Konotey \n
+        Benjamin Arhinful Awusi
+    </string>
+    <string name="send_feedback"><u>Send Feedback</u></string>
+    <string name="message_feedback">Tell us what you think or Let us know about a bug or problem</string>
 </resources>

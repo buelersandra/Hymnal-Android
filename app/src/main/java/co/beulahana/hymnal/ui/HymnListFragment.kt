@@ -4,10 +4,8 @@ package co.beulahana.hymnal.ui
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -45,6 +43,17 @@ class HymnListFragment : Fragment() {
     private var mHymnIds= arrayListOf<String>()
 
 
+    override fun onAttach(context: Context?) {
+        mDatabase= AppDatabase.getDatabaseInstance(context!!)
+        super.onAttach(context)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         val view= inflater.inflate(R.layout.fragment_hymn_list, container, false)
@@ -52,24 +61,50 @@ class HymnListFragment : Fragment() {
         return view
     }
 
+    override fun onResume() {
+        super.onResume()
+        activity!!.setTitle(R.string.app_name)
 
 
-    override fun onAttach(context: Context?) {
-        mDatabase= AppDatabase.getDatabaseInstance(context!!)
-        super.onAttach(context)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?,inflater: MenuInflater?) {
+        menu?.clear();
+        inflater!!.inflate(R.menu.activity_main,menu!!)
+    }
+
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when(item!!.itemId){
+            R.id.menu_refresh->{
+                fetchHymns()
+                return true
+            }
+            R.id.menu_about->{
+                activity!!.supportFragmentManager.beginTransaction().add(R.id.content,AboutFragment()).addToBackStack(null).commit()
+                return true
+            }
+            R.id.menu_add->{
+                activity!!.supportFragmentManager.beginTransaction().add(R.id.content,NewHymnFragment()).addToBackStack(null).commit()
+                return true
+
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     fun initView(view: View){
         mSwipeRefreshLayout=view.swipeRefreshLayout
+        mSwipeRefreshLayout!!.isEnabled=false
         view.recyclerView.layoutManager=LinearLayoutManager(activity,RecyclerView.VERTICAL,false)
         adapter = HymnAdapter(emptyList())
         view.recyclerView.adapter=adapter
         adapter!!.setHolderClickListener(object: HolderClickListener {
-            override fun onClick(id: Int, hymnId: String) {
+            override fun onClick(id: Int, hymn: HymnEntity) {
                 when(id){
                     R.id.item_layout->{
                         activity?.supportFragmentManager?.beginTransaction()?.
-                            replace(R.id.container,VersesFragment.newInstance(hymnId))?.
+                            replace(R.id.container,VersesFragment.newInstance(hymn))?.
                             addToBackStack(null)?.
                             commit()
                     }
@@ -78,6 +113,7 @@ class HymnListFragment : Fragment() {
 
 
         })
+        adapter!!.setBottomSheet(view.bottomsheet)
         initData()
     }
 
@@ -93,6 +129,7 @@ class HymnListFragment : Fragment() {
                         if(it.isNotEmpty()){
                             adapter!!.updateList(it)
                             mSwipeRefreshLayout!!.isRefreshing=false
+                            mSwipeRefreshLayout!!.isEnabled=false
 
                         }else{
                             fetchHymns()
@@ -108,11 +145,26 @@ class HymnListFragment : Fragment() {
     fun fetchHymns(){
         var hymnList= emptyList<HymnEntity>()
         mHymnIds= arrayListOf<String>()
+        mSwipeRefreshLayout!!.isEnabled=false
         mSwipeRefreshLayout!!.isRefreshing=true
         FirebaseUtil.openFbReference(COLLECTION_HYMN).get().
             addOnSuccessListener {querySnapshot ->
                 if(!querySnapshot.isEmpty){
                      hymnList=querySnapshot.toObjects(HymnEntity::class.java)
+                    querySnapshot.documents.forEach {document->
+                        mHymnIds.add(document.id) }
+
+                    hymnList.forEachIndexed { index, hymnEntity ->
+                        hymnEntity.id=mHymnIds[index]
+                    }
+
+                    compositeDisposable.add(mDatabase!!.hymnDao().insertHymns(hymnList)
+                        .subscribeOn(Schedulers.io())
+                        .subscribe(object :Action{
+                            override fun run() {
+                                fetchVerses()
+                            } })
+                    )
                     Log.e(TAG,"initView : "+hymnList.size)
                 }
             }
@@ -120,25 +172,13 @@ class HymnListFragment : Fragment() {
                 Log.e(TAG,"initView : "+exception.localizedMessage)
             }
             .addOnCompleteListener {task ->
-                if(task.isSuccessful){
-                    task.result?.forEach { document->
-                        mHymnIds.add(document.id)
-                        hymnList.forEachIndexed { index, hymnEntity ->
-                            hymnEntity.id=mHymnIds[index]
-                        }
-
-                        compositeDisposable.add(mDatabase!!
-                            .hymnDao().insertHymns(hymnList)
-                            .subscribeOn(Schedulers.io())
-                            .subscribe(object :Action{
-                                override fun run() {
-                                    fetchVerses()
-                                }
-
-                            })
-                        )
-                    }
-                }
+//                if(task.isSuccessful){
+//                    task.result?.forEach { document->
+//                        mHymnIds.add(document.id)
+//
+//
+//                    }
+//                }
 
             }
     }
@@ -176,6 +216,7 @@ class HymnListFragment : Fragment() {
                 Log.e(TAG,"initView : "+exception.localizedMessage)
             }
     }
+
 
 
 

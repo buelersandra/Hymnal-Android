@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:weightSum="3"
+              android:padding="20dp"
+              android:background="@android:color/white"
+             tools:context=".ui.AboutFragment">
+
+    <RelativeLayout android:layout_width="match_parent"
+                  android:orientation="vertical"
+                  android:layout_weight="1"
+                  android:layout_height="0dp">
+
+        <TextView android:layout_width="match_parent"
+                  android:textAlignment="center"
+                  android:layout_alignParentTop="true"
+                  style="@style/Title"
+                  android:text="Acknowledgement"
+                  android:layout_height="wrap_content"/>
+
+
+        <ImageView android:layout_width="wrap_content"
+                   android:layout_centerInParent="true"
+                   android:layout_gravity="center"
+                   android:src="@mipmap/ic_launcher"
+                   android:layout_height="wrap_content"/>
+
+
+        <TextView android:layout_width="match_parent"
+                  android:paddingBottom="20dp"
+                  android:layout_alignParentBottom="true"
+                  android:textAlignment="center"
+                  android:text="@string/text_church"
+                  android:layout_height="wrap_content"/>
+
+    </RelativeLayout>
+
+
+    <RelativeLayout android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:layout_height="0dp">
+
+        <TextView android:layout_width="match_parent"
+                  android:textAlignment="center"
+                  android:id="@+id/text_compilation"
+                  style="@style/Title"
+                  android:paddingBottom="10dp"
+                  android:layout_above="@id/text_compiler"
+                  android:text="Compilation By :"
+                  android:layout_height="wrap_content"/>
+
+        <TextView android:layout_width="match_parent"
+                  android:paddingBottom="20dp"
+                  android:layout_centerInParent="true"
+                  android:textAlignment="center"
+                  android:id="@+id/text_compiler"
+                  android:text="@string/text_compiler"
+                  android:layout_height="wrap_content"/>
+
+
+
+
+    </RelativeLayout>
+
+    <RelativeLayout android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:layout_height="0dp">
+
+        <TextView android:layout_width="match_parent"
+                  android:textAlignment="center"
+                  style="@style/Title"
+                  android:layout_above="@id/text_developers"
+                  android:textSize="14sp"
+                  android:text="Developers :"
+                  android:layout_height="wrap_content"/>
+
+        <TextView android:layout_width="match_parent"
+                  android:paddingBottom="20dp"
+                  android:layout_centerInParent="true"
+                  android:textAlignment="center"
+                  android:id="@+id/text_developers"
+                  android:text="@string/text_developers"
+                  android:layout_height="wrap_content"/>
+
+        <TextView android:layout_width="wrap_content"
+                  android:text="@string/send_feedback"
+                  android:textAlignment="center"
+                  android:id="@+id/send_feedback"
+                  android:textColor="@color/colorPrimaryDark"
+                  android:layout_centerInParent="true"
+                  android:layout_below="@id/text_developers"
+                  android:layout_height="wrap_content"/>
+
+        <TextView android:layout_width="wrap_content"
+                  android:text="@string/message_feedback"
+                  android:textAlignment="center"
+                  android:layout_centerInParent="true"
+                  android:layout_below="@id/send_feedback"
+                  android:layout_height="wrap_content"/>
+
+
+
+
+
+
+    </RelativeLayout>
+
+
+
+
+
+</LinearLayout>

@@ -1,34 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res-auto"
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:id="@+id/bottom_sheet"
-              app:behavior_hideable="true"
-              app:behavior_peekHeight="0dp"
-              android:background="@android:color/white"
-              app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+              android:background="@android:color/white">
 
     <TextView android:layout_width="match_parent"
               android:textAlignment="center"
+              android:padding="10dp"
               android:background="@color/colorPrimary"
-
-              android:textSize="@dimen/label_text"
+              style="@style/Title"
               android:textColor="@android:color/white"
-              android:text="Nyesuↄ"
-              android:textStyle="bold"
-              android:id="@+id/text_verse_number"
-              android:layout_height="wrap_content"/>
+              android:text="Nyesuↄ (Chorus)"
+              android:id="@+id/text_chorus_label"
+              android:layout_height="50dp" app:layout_constraintEnd_toEndOf="parent"
+              app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"/>
 
     <TextView android:layout_width="match_parent"
               android:textAlignment="center"
               android:textColor="@android:color/black"
+              android:paddingTop="10dp"
+              android:paddingBottom="10dp"
               android:textSize="25sp"
-              android:text=""
-              android:id="@+id/text_verse"
-              android:layout_height="wrap_content"/>
+              android:text="Bra bε tra`m' koraa, Awu`rade pa! \n
+Ne nyinaa bε yε  wↄ  Wo dↄ  nti;\n Me koma yi mu yε  \n
+Wo trabea daa, Bε tra`m', bε tra`m’. "
+              android:id="@+id/text_chorus"
+              android:layout_height="wrap_content"
+              android:lineSpacingExtra="36sp" app:layout_constraintTop_toBottomOf="@+id/text_chorus_label"
+              app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"/>
 
 
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

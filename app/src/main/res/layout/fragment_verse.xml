@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+              android:orientation="vertical"
+             android:background="@android:color/white"
+             tools:context=".ui.VersesFragment">
+
+        <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:id="@+id/recyclerView"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="50dp"
+                tools:listitem="@layout/item_verse"/>
+
+        <TextView android:layout_width="match_parent"
+                  android:textAlignment="center"
+                  android:padding="10dp"
+                  android:background="@color/colorPrimary"
+                  android:layout_gravity="bottom"
+                  style="@style/Title"
+                  android:textColor="@android:color/white"
+                  android:text="Nyesuↄ (Chorus)"
+                  android:id="@+id/text_chorus_label"
+                  android:layout_height="50dp"/>
+
+
+        <!--<include layout="@layout/botton_sheet_chorus"/>-->
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

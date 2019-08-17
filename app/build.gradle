@@ -58,7 +58,11 @@ dependencies {
     //methods > 65k
     implementation 'androidx.multidex:multidex:2.0.1'
 
+    implementation 'com.flipboard:bottomsheet-core:1.5.3'
+    implementation 'com.flipboard:bottomsheet-commons:1.5.3'
+
 }
 
 // Add the following line to the bottom of the file:
 apply plugin: 'com.google.gms.google-services'  // Google Play services Gradle plugin
+
