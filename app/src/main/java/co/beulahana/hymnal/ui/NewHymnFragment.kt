@@ -1,6 +1,7 @@
 package co.beulahana.hymnal.ui
 
 
+import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.widget.EditText
@@ -26,6 +27,12 @@ class NewHymnFragment : Fragment() {
 
     private var mTitle:EditText?=null
     private var mVersesContainer:ViewGroup?=null
+    private var mContext: Context?=null
+
+    override fun onAttach(context: Context?) {
+        mContext=context
+        super.onAttach(context)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +48,16 @@ class NewHymnFragment : Fragment() {
     fun initView(view:View){
         mTitle=view.findViewById(R.id.edit_title)
         mVersesContainer=view.findViewById(R.id.container_verses)
+        insertVerseNumbers()
+    }
+
+    fun insertVerseNumbers(){
+        val verseViews= arrayListOf<View>()
+        mVersesContainer!!.findViewsWithText(verseViews,"container_partial_verse",View.FIND_VIEWS_WITH_CONTENT_DESCRIPTION)
+        verseViews.forEachIndexed { index, view ->
+            val verseNum=view.findViewById<EditText>(R.id.edit_number)
+            verseNum.setText((index+1).toString())
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
@@ -51,7 +68,13 @@ class NewHymnFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item!!.itemId){
             R.id.menu_save->{
-                prepareHymn()
+                if(FirebaseUtil.isConnectedToInternet(context!!)){
+                    Toast.makeText(context,"Adding New Hymn",Toast.LENGTH_SHORT).show()
+                    prepareHymn()
+                }else{
+                    Toast.makeText(context,getString(R.string.message_no_internet),Toast.LENGTH_LONG).show()
+                }
+
             }
         }
         return super.onOptionsItemSelected(item)
@@ -88,8 +111,9 @@ class NewHymnFragment : Fragment() {
     }
 
     fun clear(){
-        Toast.makeText(context,"Hymn Added",Toast.LENGTH_LONG).show()
-        activity!!.supportFragmentManager.beginTransaction().add(R.id.content,NewHymnFragment()).commit()
+        Toast.makeText(mContext,"Hymn Added",Toast.LENGTH_LONG).show()
+        insertVerseNumbers()
+        //activity!!.supportFragmentManager.beginTransaction().add(R.id.content,NewHymnFragment()).commit()
     }
 
     fun prepareHymn(){
@@ -97,17 +121,21 @@ class NewHymnFragment : Fragment() {
         val verseList= arrayListOf<VerseEntity>()
         if(mTitle!!.text.isNotEmpty()){
             newHymn.title=mTitle!!.text.toString().trim().toUpperCase()
+            mTitle!!.setText("")
             val chorus=mVersesContainer!!.findViewById<EditText>(R.id.edit_chorus)
             //if(chorus.text.isNotEmpty()){
                 newHymn.chorus=chorus.text.toString().trim()
+                chorus.setText("")
                 val verseViews= arrayListOf<View>()
                 mVersesContainer!!.findViewsWithText(verseViews,"container_partial_verse",View.FIND_VIEWS_WITH_CONTENT_DESCRIPTION)
                 verseViews.forEach {
                     val verseNum=it.findViewById<EditText>(R.id.edit_number)
                     val verse=it.findViewById<EditText>(R.id.edit_verse)
-                    if(verseNum.text.isNotEmpty() && verseNum.text.isNotEmpty()){
+                    if(verseNum.text.isNotEmpty() && verse.text.isNotEmpty()){
                         verseList.add(VerseEntity(0,"", verseNum.text.toString().toInt(),verse.text.toString()))
                     }
+                    verseNum.setText("")
+                    verse.setText("")
 
                 }
                 saveHymn(newHymn,verseList)

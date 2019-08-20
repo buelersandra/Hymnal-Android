@@ -2,6 +2,7 @@ package co.beulahana.hymnal.data.entity
 
 import android.os.Parcelable
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
 
@@ -10,14 +11,15 @@ import kotlinx.android.parcel.Parcelize
  */
 
 @Parcelize
-@Entity(tableName = "hymn")
+@Entity(tableName = "hymn",indices = [Index(value = ["title","number"],unique = true)])
 data class HymnEntity(
     @PrimaryKey(autoGenerate = false)
     var id:String,
     var title:String,
+    var number:Int,
     var chorus:String
 
 ) :Parcelable{
 
-    constructor():this("","","")
+    constructor():this("","",0,"")
 }

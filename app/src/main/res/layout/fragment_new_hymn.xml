@@ -60,6 +60,16 @@
 
             <include layout="@layout/partial_verse"/>
 
+            <include layout="@layout/partial_verse"/>
+
+            <include layout="@layout/partial_verse"/>
+
+            <include layout="@layout/partial_verse"/>
+
+            <include layout="@layout/partial_verse"/>
+
+            <include layout="@layout/partial_verse"/>
+
         </LinearLayout>
 
     </ScrollView>

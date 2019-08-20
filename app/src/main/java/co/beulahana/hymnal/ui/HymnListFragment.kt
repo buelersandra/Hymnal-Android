@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -41,10 +42,12 @@ class HymnListFragment : Fragment() {
     private var compositeDisposable:CompositeDisposable= CompositeDisposable()
     private var mSwipeRefreshLayout:SwipeRefreshLayout?=null
     private var mHymnIds= arrayListOf<String>()
+    private var mContext:Context?=null
 
 
     override fun onAttach(context: Context?) {
         mDatabase= AppDatabase.getDatabaseInstance(context!!)
+        mContext=context
         super.onAttach(context)
     }
 
@@ -119,68 +122,73 @@ class HymnListFragment : Fragment() {
 
 
     fun initData(){
-        compositeDisposable.add(mDatabase!!
-            .hymnDao().getHymns()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : Consumer<List<HymnEntity>>{
-                override fun accept(t: List<HymnEntity>?) {
-                    t?.let {
-                        if(it.isNotEmpty()){
-                            adapter!!.updateList(it)
-                            mSwipeRefreshLayout!!.isRefreshing=false
-                            mSwipeRefreshLayout!!.isEnabled=false
 
-                        }else{
-                            fetchHymns()
+            compositeDisposable.add(mDatabase!!
+                .hymnDao().getHymns()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(object : Consumer<List<HymnEntity>>{
+                    override fun accept(t: List<HymnEntity>?) {
+                        t?.let {
+                            if(it.isNotEmpty()){
+                                adapter!!.updateList(it)
+                                mSwipeRefreshLayout!!.isRefreshing=false
+                                mSwipeRefreshLayout!!.isEnabled=false
+                                Toast.makeText(mContext,getString(R.string.message_fetch_hymn_done),Toast.LENGTH_LONG).show()
+
+
+                            }else{
+                                fetchHymns()
+                            }
+
                         }
 
                     }
 
-                }
+                }))
 
-            }))
+
     }
 
     fun fetchHymns(){
-        var hymnList= emptyList<HymnEntity>()
-        mHymnIds= arrayListOf<String>()
-        mSwipeRefreshLayout!!.isEnabled=false
-        mSwipeRefreshLayout!!.isRefreshing=true
-        FirebaseUtil.openFbReference(COLLECTION_HYMN).get().
-            addOnSuccessListener {querySnapshot ->
-                if(!querySnapshot.isEmpty){
-                     hymnList=querySnapshot.toObjects(HymnEntity::class.java)
-                    querySnapshot.documents.forEach {document->
-                        mHymnIds.add(document.id) }
 
-                    hymnList.forEachIndexed { index, hymnEntity ->
-                        hymnEntity.id=mHymnIds[index]
+        if(FirebaseUtil.isConnectedToInternet(context!!)){
+            var hymnList= emptyList<HymnEntity>()
+            mHymnIds= arrayListOf<String>()
+            mSwipeRefreshLayout!!.isEnabled=false
+            mSwipeRefreshLayout!!.isRefreshing=true
+            Toast.makeText(mContext,getString(R.string.message_fetch_hymn),Toast.LENGTH_LONG).show()
+            FirebaseUtil.openFbReference(COLLECTION_HYMN).get().
+                addOnSuccessListener {querySnapshot ->
+                    if(!querySnapshot.isEmpty){
+                         hymnList=querySnapshot.toObjects(HymnEntity::class.java)
+                        querySnapshot.documents.forEach {document->
+                            mHymnIds.add(document.id) }
+
+                        hymnList.forEachIndexed { index, hymnEntity ->
+                            hymnEntity.id=mHymnIds[index]
+                            hymnEntity.number=hymnEntity.title.trim().substring(9,hymnEntity.title.trim().length).trim().toInt()
+                        }
+
+                        compositeDisposable.add(mDatabase!!.hymnDao().insertHymns(hymnList)
+                            .subscribeOn(Schedulers.io())
+                            .subscribe(object :Action{
+                                override fun run() {
+                                    fetchVerses()
+                                } })
+                        )
+                        Log.e(TAG,"initView : "+hymnList.size)
                     }
-
-                    compositeDisposable.add(mDatabase!!.hymnDao().insertHymns(hymnList)
-                        .subscribeOn(Schedulers.io())
-                        .subscribe(object :Action{
-                            override fun run() {
-                                fetchVerses()
-                            } })
-                    )
-                    Log.e(TAG,"initView : "+hymnList.size)
                 }
-            }
-            .addOnFailureListener { exception ->
-                Log.e(TAG,"initView : "+exception.localizedMessage)
-            }
-            .addOnCompleteListener {task ->
-//                if(task.isSuccessful){
-//                    task.result?.forEach { document->
-//                        mHymnIds.add(document.id)
-//
-//
-//                    }
-//                }
+                .addOnFailureListener { exception ->
+                    Log.e(TAG,"initView : "+exception.localizedMessage)
+                }
+                .addOnCompleteListener {task ->
 
-            }
+                }
+        }else{
+            Toast.makeText(context,getString(R.string.message_no_internet), Toast.LENGTH_LONG).show()
+        }
     }
 
     override fun onDetach() {

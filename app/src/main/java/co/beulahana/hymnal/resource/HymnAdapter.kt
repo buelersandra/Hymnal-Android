@@ -78,7 +78,7 @@ class HymnAdapter constructor(_hymnList:List<HymnEntity>) : RecyclerView.Adapter
             shareIntent.putExtra(Intent.EXTRA_SUBJECT, itemView.context.getResources().getString(R.string.app_name))
             shareIntent.putExtra(
                 Intent.EXTRA_TEXT,
-                hymnEntity.title + ".\n\n" + hymnEntity.chorus)
+                hymnEntity.title + ".\n\nChorus\n" + hymnEntity.chorus+"\n"+itemView.context.getString(R.string.share_message))
             shareIntent.type = "text/plain"
 
             val intentPickerSheetView = IntentPickerSheetView(itemView.context, shareIntent, "Share with...",
