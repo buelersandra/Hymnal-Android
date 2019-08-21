@@ -22,7 +22,11 @@
     <string name="send_feedback"><u>Send Feedback</u></string>
     <string name="message_feedback">Tell us what you think or Let us know about a bug or problem</string>
     <string name="share_message">Download CACI Hymnal \n https://play.google.com/store/apps/details?id=co.beulahana.hymnal</string>
-    <string name="message_no_internet">No Internet Connection. Click REFRESH to update Hymns</string>
+    <string name="message_no_internet">No Internet Connection. Make sure that wifi or mobile data is turned on then Click REFRESH to update Hymns</string>
     <string name="message_fetch_hymn">"Loading Hymns&#8230;"</string>
-    <string name="message_fetch_hymn_done">"Hymns Loading Completed. Click REFRESH to update Hymns"</string>
+    <string name="message_fetch_hymn_done">"Hymns Loading Completed. Later on, click REFRESH to update Hymns"</string>
+    <string name="menu_about">About</string>
+    <string name="menu_search">Search</string>
+    <string name="menu_refresh">Refresh</string>
+    <string name="menu_add_hymn">Add Hymn</string>
 </resources>

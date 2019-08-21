@@ -4,10 +4,7 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
-import androidx.annotation.IdRes
+import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import co.beulahana.hymnal.R
 import co.beulahana.hymnal.data.entity.HymnEntity
@@ -17,24 +14,25 @@ import com.flipboard.bottomsheet.commons.IntentPickerSheetView
 /**
  * Created by Sandra Konotey on 2019-08-11.
  */
-class HymnAdapter constructor(_hymnList:List<HymnEntity>) : RecyclerView.Adapter<HymnAdapter.HymnViewHolder>() {
+class HymnAdapter constructor(_hymnList:List<HymnEntity>) : RecyclerView.Adapter<HymnAdapter.HymnViewHolder>(),Filterable {
 
-    var hymnList= _hymnList
+    var filterHymnList = _hymnList
+    var hymnList = _hymnList
     private var holderClickListener:HolderClickListener?=null
     private var bottomSheetLayout:BottomSheetLayout?=null
+    private var customFilter:CustomFilter= CustomFilter()
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HymnViewHolder {
         return HymnViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_hymn,parent,false))
-
     }
 
     override fun getItemCount(): Int {
-        return hymnList.size
+        return filterHymnList.size
     }
 
     override fun onBindViewHolder(holder: HymnViewHolder, position: Int) {
-        val hymnEntity=hymnList.get(position)
+        val hymnEntity=filterHymnList.get(position)
         holder.bind(hymnEntity)
         holder.item_layout.setOnClickListener {
             holderClickListener?.onClick(it.id,hymnEntity)
@@ -42,7 +40,8 @@ class HymnAdapter constructor(_hymnList:List<HymnEntity>) : RecyclerView.Adapter
     }
 
 
-    fun updateList(_hymnList:List<HymnEntity>){
+    fun setList(_hymnList:List<HymnEntity>){
+        this.filterHymnList=_hymnList
         this.hymnList=_hymnList
         notifyDataSetChanged()
     }
@@ -56,8 +55,10 @@ class HymnAdapter constructor(_hymnList:List<HymnEntity>) : RecyclerView.Adapter
     fun setBottomSheet(bottomsheet:BottomSheetLayout){
         bottomSheetLayout=bottomsheet
     }
-    
 
+    override fun getFilter(): Filter {
+        return customFilter
+    }
 
     inner class HymnViewHolder(itemView: View):RecyclerView.ViewHolder(itemView){
 
@@ -91,5 +92,38 @@ class HymnAdapter constructor(_hymnList:List<HymnEntity>) : RecyclerView.Adapter
             bottomSheetLayout!!.showWithSheetView(intentPickerSheetView)
         }
 
+    }
+
+    inner class CustomFilter: Filter(){
+
+        override fun performFiltering(search: CharSequence?): FilterResults {
+            val filterResults=FilterResults()
+            val filteredList= arrayListOf<HymnEntity>()
+            if(!search.isNullOrEmpty()){
+                hymnList.forEach { hymn->
+                    if(hymn.title.contains(search.toString(),true)){
+                        filteredList.add(hymn)
+                    }
+                }
+
+                filterResults.values=filteredList
+                filterResults.count=filteredList.size
+            }else{
+                filterResults.values=hymnList
+                filterResults.count=hymnList.size
+            }
+
+
+            return filterResults
+
+        }
+
+        override fun publishResults(p0: CharSequence?, p1: FilterResults?) {
+            p1?.let {
+                this@HymnAdapter.filterHymnList= it.values as List<HymnEntity>
+                notifyDataSetChanged()
+            }
+
+        }
     }
 }

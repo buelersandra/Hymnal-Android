@@ -1,11 +1,16 @@
 package co.beulahana.hymnal.ui
 
 
+import android.app.Activity
+import android.app.SearchManager
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.*
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -42,13 +47,15 @@ class HymnListFragment : Fragment() {
     private var compositeDisposable:CompositeDisposable= CompositeDisposable()
     private var mSwipeRefreshLayout:SwipeRefreshLayout?=null
     private var mHymnIds= arrayListOf<String>()
-    private var mContext:Context?=null
+    private var mContext: Activity?=null
+    private var searchView:SearchView?=null
 
 
     override fun onAttach(context: Context?) {
-        mDatabase= AppDatabase.getDatabaseInstance(context!!)
-        mContext=context
         super.onAttach(context)
+        mDatabase= AppDatabase.getDatabaseInstance(context!!)
+        mContext=context as Activity
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,16 +71,37 @@ class HymnListFragment : Fragment() {
         return view
     }
 
+
+
     override fun onResume() {
         super.onResume()
         activity!!.setTitle(R.string.app_name)
+    }
 
+    override fun onPause() {
+        super.onPause()
+        searchView!!.setQuery("",true)
 
     }
 
     override fun onCreateOptionsMenu(menu: Menu?,inflater: MenuInflater?) {
         menu?.clear();
-        inflater!!.inflate(R.menu.activity_main,menu!!)
+        inflater!!.inflate(R.menu.fragment_hymn_list,menu!!)
+        searchView?.setQuery("",true)
+        val searchManager:SearchManager = mContext!!.getSystemService(Context.SEARCH_SERVICE)  as SearchManager
+        searchView = menu.findItem(R.id.menu_search).actionView as SearchView?
+        searchView!!.setSearchableInfo(searchManager.getSearchableInfo(mContext!!.getComponentName()))
+        searchView!!.setOnQueryTextListener(object :SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                adapter!!.filter.filter(newText)
+                return true
+            }
+        })
+
     }
 
 
@@ -90,8 +118,8 @@ class HymnListFragment : Fragment() {
             R.id.menu_add->{
                 activity!!.supportFragmentManager.beginTransaction().add(R.id.content,NewHymnFragment()).addToBackStack(null).commit()
                 return true
-
             }
+
         }
         return super.onOptionsItemSelected(item)
     }
@@ -106,6 +134,7 @@ class HymnListFragment : Fragment() {
             override fun onClick(id: Int, hymn: HymnEntity) {
                 when(id){
                     R.id.item_layout->{
+
                         activity?.supportFragmentManager?.beginTransaction()?.
                             replace(R.id.container,VersesFragment.newInstance(hymn))?.
                             addToBackStack(null)?.
@@ -117,7 +146,14 @@ class HymnListFragment : Fragment() {
 
         })
         adapter!!.setBottomSheet(view.bottomsheet)
-        initData()
+        val handler= Handler(Looper.getMainLooper())
+        handler.postDelayed(object :Runnable{
+            override fun run() {
+                initData()
+            }
+        },0)
+
+
     }
 
 
@@ -131,7 +167,7 @@ class HymnListFragment : Fragment() {
                     override fun accept(t: List<HymnEntity>?) {
                         t?.let {
                             if(it.isNotEmpty()){
-                                adapter!!.updateList(it)
+                                adapter!!.setList(it)
                                 mSwipeRefreshLayout!!.isRefreshing=false
                                 mSwipeRefreshLayout!!.isEnabled=false
                                 Toast.makeText(mContext,getString(R.string.message_fetch_hymn_done),Toast.LENGTH_LONG).show()
