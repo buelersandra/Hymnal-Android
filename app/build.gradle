@@ -39,22 +39,28 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
+    //MVVM
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
+    kapt 'androidx.lifecycle:lifecycle-extensions:2.0.0'
+
+
+
     //room
-    implementation 'androidx.room:room-runtime:2.2.0-alpha02'
-    implementation 'androidx.room:room-rxjava2:2.2.0-alpha02'
-    kapt 'androidx.room:room-compiler:2.2.0-alpha02'
+    implementation 'androidx.room:room-runtime:2.2.0-beta01'
+    implementation 'androidx.room:room-rxjava2:2.2.0-beta01'
+    kapt 'androidx.room:room-compiler:2.2.0-beta01'
 
     //reactive programming libraries
-    implementation 'io.reactivex.rxjava2:rxjava:2.1.14'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.9'
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
 
     //firebase realtime database
-    implementation 'com.google.firebase:firebase-database:18.0.1'
+    implementation 'com.google.firebase:firebase-database:19.0.0'
 
     //firebase cloud store
-    implementation 'com.google.firebase:firebase-firestore:20.2.0'
+    implementation 'com.google.firebase:firebase-firestore:21.0.0'
 
-    implementation "android.arch.lifecycle:extensions:1.1.1"
+
 
     //methods > 65k
     implementation 'androidx.multidex:multidex:2.0.1'
@@ -69,6 +75,7 @@ dependencies {
 
     // Add dependency
     implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
+
 }
 
 // Add the following line to the bottom of the file:

@@ -8,11 +8,15 @@ import android.util.Log
 import android.view.*
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import co.beulahana.hymnal.R
 import co.beulahana.hymnal.data.AppDatabase
+import co.beulahana.hymnal.data.DataViewModel
 import co.beulahana.hymnal.data.entity.HymnEntity
+import co.beulahana.hymnal.data.entity.VerseEntity
 import co.beulahana.hymnal.resource.VerseAdapter
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -67,13 +71,17 @@ class VersesFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         val view= inflater.inflate(co.beulahana.hymnal.R.layout.fragment_verse, container, false)
         initView(view)
         return view
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        val dataViewModel=ViewModelProviders.of(this).get(DataViewModel::class.java)
+        initData(dataViewModel)
     }
 
 
@@ -83,10 +91,8 @@ class VersesFragment : Fragment() {
         adapter = VerseAdapter(emptyList())
         view.recyclerView.adapter=adapter
         activity?.setTitle(hymn!!.title)
-        //val sheetBehavior=BottomSheetBehavior.from(view.bottom_sheet)
 
         val chorus=hymn!!.chorus.replace("\\n","\n")
-        //view.text_chorus.setText(chorus)
 
         val dialogView = layoutInflater.inflate(R.layout.botton_sheet_chorus, null)
         val dialog = BottomSheetDialog(context!!)
@@ -101,33 +107,23 @@ class VersesFragment : Fragment() {
 
         view.text_chorus_label.setOnClickListener {
             dialog.show()
-            //            if(sheetBehavior.state!=BottomSheetBehavior.STATE_EXPANDED){
-//                sheetBehavior.state=BottomSheetBehavior.STATE_EXPANDED
-//            }else{
-//                sheetBehavior.state=BottomSheetBehavior.STATE_COLLAPSED
-//            }
         }
-
-
-
-
-        initData()
     }
 
 
-    fun initData(){
-        mDatabase!!.verseDao().getVerses(hymn!!.id)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({verseList->
-               verseList?.let {
-                   Log.e(TAG,it.size.toString())
-                   if(it.isNotEmpty()){
-                       adapter!!.updateList(it)
+    fun initData(dataViewModel: DataViewModel){
+        dataViewModel.getVerseObservable(hymn!!.id).observe(this,object :Observer<List<VerseEntity>>{
+            override fun onChanged(list: List<VerseEntity>?) {
+                list?.let {
+                    Log.e(TAG,it.size.toString())
+                    if(it.isNotEmpty()){
+                        adapter!!.updateList(it)
 
-                   }
-               }
-            })
+                    }
+                }
+
+            }
+        })
 
     }
 

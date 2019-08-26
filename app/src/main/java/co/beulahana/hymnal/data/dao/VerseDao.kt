@@ -1,5 +1,6 @@
 package co.beulahana.hymnal.data.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -21,5 +22,5 @@ interface VerseDao {
     fun insertVerses(hyms:List<VerseEntity>):Maybe<List<Long>>
 
     @Query("SELECT * FROM verse WHERE hymnId==:hymnId ORDER BY verseNumber asc")
-    fun getVerses(hymnId:String): Flowable<List<VerseEntity>>
+    fun getVerses(hymnId:String): LiveData<List<VerseEntity>>
 }

@@ -29,4 +29,6 @@
     <string name="menu_search">Search</string>
     <string name="menu_refresh">Refresh</string>
     <string name="menu_add_hymn">Add Hymn</string>
+    <string name="edit_title">Title</string>
+    <string name="edit_chorus">Chorus</string>
 </resources>
