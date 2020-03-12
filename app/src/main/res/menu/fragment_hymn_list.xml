@@ -3,7 +3,7 @@
 
     <item android:title="@string/menu_add_hymn"
           android:id="@+id/menu_add"
-          android:visible="false"/>
+          android:visible="true"/>
 
     <item android:title="@string/menu_refresh"
           android:id="@+id/menu_refresh"

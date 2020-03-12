@@ -33,9 +33,6 @@ class DataViewModel(application: Application) : AndroidViewModel(application) {
         mDataRepository= DataRepository.getInstance(application)
     }
 
-
-
-
     fun getHymnsObserable(): Flowable<List<HymnEntity>> {
         return mDataRepository.getHymnsData()
     }

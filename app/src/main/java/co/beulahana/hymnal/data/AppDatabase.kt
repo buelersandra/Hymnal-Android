@@ -14,7 +14,7 @@ import co.beulahana.hymnal.data.entity.VerseEntity
  */
 
 @Database(entities = [HymnEntity::class, VerseEntity::class],version = 1,exportSchema = false)
-internal abstract class AppDatabase : RoomDatabase(){
+abstract class AppDatabase : RoomDatabase(){
 
     abstract fun hymnDao():HymnDao
     abstract fun verseDao():VerseDao

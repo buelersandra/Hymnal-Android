@@ -33,14 +33,14 @@ import kotlinx.android.synthetic.main.fragment_hymn_list.view.*
  */
 class HymnListFragment : Fragment() {
 
-    private val TAG=HymnListFragment::class.java.simpleName
+    //private val TAG=this::class.simpleName
     private var adapter: HymnAdapter?=null
 
     private var mSwipeRefreshLayout:SwipeRefreshLayout?=null
 
     private var mContext: Activity?=null
     private var searchView:SearchView?=null
-    lateinit  var mDataViewModel:DataViewModel
+    lateinit var mDataViewModel:DataViewModel
     private var compositeDisposable=CompositeDisposable()
 
 
@@ -70,12 +70,6 @@ class HymnListFragment : Fragment() {
         return view
     }
 
-
-
-//    override fun onResume() {
-//        super.onResume()
-//        activity!!.setTitle(R.string.app_name)
-//    }
 
 
     override fun onCreateOptionsMenu(menu: Menu?,inflater: MenuInflater?) {
@@ -152,10 +146,13 @@ class HymnListFragment : Fragment() {
             mSwipeRefreshLayout!!.isRefreshing=true
             mDataViewModel!!.getHymnsObserable().observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                adapter!!.setList(it)
-                mSwipeRefreshLayout!!.isRefreshing=false
-                mSwipeRefreshLayout!!.isEnabled=false
-                Toast.makeText(mContext,R.string.message_fetch_hymn_done,Toast.LENGTH_LONG).show()
+                    if(it.size!=0){
+                        adapter!!.setList(it)
+                        mSwipeRefreshLayout!!.isRefreshing=false
+                        mSwipeRefreshLayout!!.isEnabled=false
+                        Toast.makeText(mContext,R.string.message_fetch_hymn_done,Toast.LENGTH_LONG).show()
+                    }
+
 
             })
 

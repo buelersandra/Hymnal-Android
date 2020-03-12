@@ -1,5 +1,7 @@
 package co.beulahana.hymnal.data.dao
 
+import android.database.Cursor
+import androidx.annotation.VisibleForTesting
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -20,4 +22,11 @@ interface HymnDao {
 
     @Query("SELECT * FROM hymn ORDER BY number asc")
     fun getHymns():Flowable<List<HymnEntity>>
+
+    @Query("SELECT * FROM hymn ORDER BY number asc")
+    fun getHymnsCursor(): Cursor
+
+    @VisibleForTesting
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(hyms:List<HymnEntity>)
 }

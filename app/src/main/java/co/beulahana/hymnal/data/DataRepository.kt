@@ -119,4 +119,6 @@ class DataRepository constructor(context: Context){
                 Log.e(TAG,"initView : "+exception.localizedMessage)
             }
     }
+
+
 }

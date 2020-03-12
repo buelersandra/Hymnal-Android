@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools"
           package="co.beulahana.hymnal">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
     <uses-sdk tools:overrideLibrary="com.google.firebase.iid"/>
+
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
             android:allowBackup="true"
@@ -12,6 +14,13 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
+        <provider
+                android:name=".data.contentprovider.HymnContentProvider"
+                android:authorities="co.beulahana.hymnal.provider"
+                android:enabled="true"
+                android:exported="true">
+        </provider>
+
         <activity
                 android:name=".ui.MainActivity"
                 android:label="@string/app_name">
