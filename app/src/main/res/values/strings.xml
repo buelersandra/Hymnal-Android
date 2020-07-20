@@ -1,34 +1,34 @@
 <resources>
     <string name="app_name">CACI Hymnal</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_home" translatable="false">Home</string>
+    <string name="title_dashboard" translatable="false">Dashboard</string>
+    <string name="title_notifications" translatable="false">Notifications</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="text_church">Christ Apostolic Church International</string>
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
+    <string name="text_church" translatable="false">Christ Apostolic Church International</string>
 
-    <string name="text_compiler">
+    <string name="text_compiler" translatable="false">
         Cephas Narh Dosoo  (National Music Director) \n
         Paul Meenu\n
         Benjamin Anum Atteh\n
         Lousi Adentwi-Eyiah
     </string>
 
-    <string name="text_developers">
+    <string name="text_developers" translatable="false">
         Sandra Konotey \n
         Benjamin Arhinful Awusi
     </string>
-    <string name="send_feedback"><u>Send Feedback</u></string>
-    <string name="message_feedback">Tell us what you think or Let us know about a bug or problem</string>
-    <string name="share_message">Download CACI Hymnal \n https://play.google.com/store/apps/details?id=co.beulahana.hymnal</string>
-    <string name="message_no_internet">No Internet Connection. Make sure that wifi or mobile data is turned on then Click REFRESH to update Hymns</string>
-    <string name="message_fetch_hymn">"Loading Hymns&#8230;"</string>
-    <string name="message_fetch_hymn_done">"Hymns Loading Completed. Later on, click REFRESH to update Hymns"</string>
-    <string name="menu_about">About</string>
-    <string name="menu_search">Search</string>
-    <string name="menu_refresh">Refresh</string>
-    <string name="menu_add_hymn">Add Hymn</string>
-    <string name="edit_title">Title</string>
+    <string name="send_feedback" translatable="false"><u>Send Feedback</u></string>
+    <string name="message_feedback" translatable="false">Tell us what you think or Let us know about a bug or problem</string>
+    <string name="share_message" translatable="false">Download CACI Hymnal \n https://play.google.com/store/apps/details?id=co.beulahana.hymnal</string>
+    <string name="message_no_internet" translatable="false">No Internet Connection. Make sure that wifi or mobile data is turned on then Click REFRESH to update Hymns</string>
+    <string name="message_fetch_hymn" translatable="false">"Loading Hymns&#8230;"</string>
+    <string name="message_fetch_hymn_done" translatable="false">"Hymns Loading Completed. Later on, click REFRESH to update Hymns"</string>
+    <string name="menu_about" translatable="false">About</string>
+    <string name="menu_search" translatable="false">Search</string>
+    <string name="menu_refresh" translatable="false">Refresh</string>
+    <string name="menu_add_hymn" translatable="false">Add Hymn</string>
+    <string name="edit_title" translatable="false">Title</string>
     <string name="edit_chorus">Chorus</string>
 </resources>
