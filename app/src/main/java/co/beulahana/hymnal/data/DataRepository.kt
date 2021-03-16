@@ -13,6 +13,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Action
 import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
+import java.util.*
 
 
 /**
@@ -73,18 +74,28 @@ class DataRepository constructor(context: Context){
                         mHymnIds.add(document.id) }
 
                     hymnList.forEachIndexed { index, hymnEntity ->
-                        hymnEntity.id=mHymnIds[index]
-                        hymnEntity.number=hymnEntity.title.trim().substring(9,hymnEntity.title.trim().length).trim().toInt()
+                        if (hymnEntity.title.toLowerCase(Locale.ROOT).contains("cac")){
+                            hymnEntity.id=mHymnIds[index]
+
+                            try {
+                                hymnEntity.number= hymnEntity.title.trim().substring(9,hymnEntity.title.trim().length).trim().toInt()
+
+                            }catch (e:Exception){
+                                Log.e("hymnEntity", e.message!!)
+                            }
+                        }
+
                     }
 
-                    compositeDisposable.add(mDatabase!!.hymnDao().insertHymns(hymnList)
+                    compositeDisposable.add(mDatabase.hymnDao().deleteHymns()
                         .subscribeOn(Schedulers.io())
-                        .subscribe(object : Action {
-                            override fun run() {
-                                fetchVerses()
-                            } })
-                    )
-                    Log.e(TAG,"initView : "+hymnList.size)
+                            .subscribe(object : Action {
+                                override fun run() {
+                                    persistHyms(hymnList)
+                                } }))
+
+
+
                 }
             }
             .addOnFailureListener { exception ->
@@ -93,6 +104,17 @@ class DataRepository constructor(context: Context){
             .addOnCompleteListener {task ->
 
             }
+    }
+
+    private fun persistHyms(hymnList : List<HymnEntity> ){
+        compositeDisposable.add(mDatabase!!.hymnDao().insertHymns(hymnList)
+            .subscribeOn(Schedulers.io())
+            .subscribe(object : Action {
+                override fun run() {
+                    fetchVerses()
+                } })
+        )
+        Log.e(TAG,"initView : "+hymnList.size)
     }
 
     private fun fetchVerses(){

@@ -20,6 +20,9 @@ interface HymnDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertHymns(hyms:List<HymnEntity>):Completable
 
+    @Query("DELETE FROM hymn")
+    fun deleteHymns(): Completable
+
     @Query("SELECT * FROM hymn ORDER BY number asc")
     fun getHymns():Flowable<List<HymnEntity>>
 

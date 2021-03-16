@@ -44,7 +44,7 @@ class HymnListFragment : Fragment() {
     private var compositeDisposable=CompositeDisposable()
 
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         mContext=context as Activity
 
@@ -72,7 +72,7 @@ class HymnListFragment : Fragment() {
 
 
 
-    override fun onCreateOptionsMenu(menu: Menu?,inflater: MenuInflater?) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         menu?.clear();
         inflater!!.inflate(R.menu.fragment_hymn_list,menu!!)
         searchView?.setQuery("",true)
@@ -93,7 +93,7 @@ class HymnListFragment : Fragment() {
     }
 
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item!!.itemId){
             R.id.menu_refresh->{
                 mDataViewModel.fetchData()

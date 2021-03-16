@@ -22,7 +22,7 @@ class HymnContentProvider : ContentProvider() {
     }
 
     override fun onCreate(): Boolean {
-        mDatabase = AppDatabase.getDatabaseInstance(context)
+        mDatabase = AppDatabase.getDatabaseInstance(context!!,)
         return true
     }
 

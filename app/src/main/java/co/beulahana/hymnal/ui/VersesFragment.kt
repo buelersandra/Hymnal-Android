@@ -51,14 +51,14 @@ class VersesFragment : Fragment() {
             }
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         (context as MainActivity).supportActionBar?.setHomeButtonEnabled(true)
         mDatabase= AppDatabase.getDatabaseInstance(context!!)
 
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         menu?.clear()
     }
 

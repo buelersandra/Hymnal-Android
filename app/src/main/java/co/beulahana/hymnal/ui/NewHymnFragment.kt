@@ -29,7 +29,7 @@ class NewHymnFragment : Fragment() {
     private var mVersesContainer:ViewGroup?=null
     private var mContext: Context?=null
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         mContext=context
         super.onAttach(context)
     }
@@ -60,12 +60,12 @@ class NewHymnFragment : Fragment() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         menu?.clear();
         inflater!!.inflate(R.menu.fragment_add_hymn,menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item!!.itemId){
             R.id.menu_save->{
                 if(FirebaseUtil.isConnectedToInternet(context!!)){
